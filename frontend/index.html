@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Shortener Web App</title>
+  <link rel="stylesheet" href="frontend/src/index.css">
+</head>
+<body>
+  <h1>URL Shortener</h1>
+  <form id="shortenForm">
+    <label for="longUrl">Original Long URL:</label>
+    <input type="url" id="longUrl" name="longUrl" required>
+    <br><br>
+    <label for="validity">Validity Period (minutes, optional):</label>
+    <input type="number" id="validity" name="validity" min="1">
+    <br><br>
+    <label for="shortcode">Preferred Shortcode (optional):</label>
+    <input type="text" id="shortcode" name="shortcode">
+    <br><br>
+    <button type="submit">Shorten URL</button>
+  </form>
+  <h2>Shortened Links</h2>
+  <table id="linksTable" border="1" cellpadding="5">
+    <thead>
+      <tr>
+        <th>Shortened Link</th>
+        <th>Expiry Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Shortened links will be displayed here -->
+    </tbody>
+  </table>
+  <script>
+    const form = document.getElementById('shortenForm');
+    const tableBody = document.querySelector('#linksTable tbody');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const longUrl = document.getElementById('longUrl').value;
+      const validity = document.getElementById('validity').value;
+      const shortcode = document.getElementById('shortcode').value;
+
+      // Simulate backend response
+      const shortUrl = 'https://short.ly/' + (shortcode || Math.random().toString(36).substr(2, 6));
+      let expiryDate = 'Never';
+      if (validity) {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + parseInt(validity));
+        expiryDate = now.toLocaleString();
+      }
+
+      const row = document.createElement('tr');
+      row.innerHTML = `<td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td><td>${expiryDate}</td>`;
+      tableBody.appendChild(row);
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
